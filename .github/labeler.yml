@@ -7,6 +7,9 @@ bug:
   - head-branch: ['^bugfix', '^hotfix', '^bug']
 
 # Labels by changed files
+git:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_config/git/*']
 lazygit:
   - changed-files:
       - any-glob-to-any-file: ['dot_config/lazygit/*']

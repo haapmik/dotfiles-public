@@ -1,0 +1,15 @@
+[init]
+  defaultBranch = main
+[core]
+  editor = nvim
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
+[include]
+  path = "./repo-config.inc"
