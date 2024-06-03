@@ -7,6 +7,9 @@ bug:
   - head-branch: ['^bugfix', '^hotfix', '^bug']
 
 # Labels by changed files
+systemd:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_config/systemd/*']
 zsh:
   - changed-files:
       - any-glob-to-any-file: ['dot_zshrc', 'dot_zshenv', 'dot_config/zi/*']

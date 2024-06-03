@@ -11,6 +11,7 @@
 # Default blocks
 dot_config/*
 !dot_config/zi
+!dot_config/systemd
 dot_local
 dot_ssh
 private_dot_ssh
