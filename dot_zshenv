@@ -1,0 +1,66 @@
+# Disable system-wide compinit call
+skip_global_compinit=1
+
+if [[ -f "${HOME}/.zshenv_secrets" ]]; then
+    source "${HOME}/.zshenv_secrets"
+fi
+
+export EDITOR="/usr/bin/nvim"
+
+# https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+export XDG_CONFIG_HOME="${HOME}/.config"    # User's /etc
+export XDG_DATA_HOME="${HOME}/.local/share" # User's /usr/share
+export XDG_STATE_HOME="${HOME}/.local/state"
+export XDG_CACHE_HOME="${HOME}/.cache"      # User's /var/cache
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME}/zsh"
+
+# Locally installed binaries
+export PATH="${PATH}:${HOME}/.local/bin"
+
+# zsh
+export XDG_ZI_HOME="${XDG_DATA_HOME}/zi"
+export XDG_ZI_CACHE="${XDG_CACHE_HOME}/zi"
+export XDG_ZI_CONFIG="${XDG_CONFIG_HOME}/zi"
+
+# rust cargo
+export CARGO_HOME="${HOME}/.local/share/cargo"
+export RUSTUP_HOME="${HOME}/.local/share/rustup"
+
+if [[ -f "${CARGO_HOME}/env" ]]; then
+    . "${CARGO_HOME}/env"
+fi
+
+# bun
+export BUN_INSTALL="${XDG_DATA_HOME}/bun"
+export PATH="${PATH}:${BUN_INSTALL}/bin"
+
+# Go
+export GOPATH="${XDG_DATA_HOME}/go"
+export PATH="${PATH}:${GOPATH}/bin"
+
+# nvim Mason
+export MASONPATH="${XDG_DATA_HOME}/nvim/mason"
+export PATH="${PATH}:${MASONPATH}/bin"
+
+# nodejs npm
+export NPMPATH="${XDG_DATA_HOME}/npm"
+export PATH="${PATH}:${NPMPATH}/bin"
+
+# snapd binaries
+export PATH="${PATH}:/snap/bin"
+
+# jfrog
+export JFROG_CLI_HOME_DIR="${XDG_DATA_HOME}/jfrog"
+
+# kubectl krew
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+# Add WSL paths
+export PATH="${PATH}:/mnt/c/Users/$(whoami)/AppData/Local/Programs/Microsoft VS Code/bin"
+export PATH="${PATH}:/mnt/c/Windows/System32/copy.exe"
+#export PATH="${PATH}:/mnt/c/Windows/System32/WindowsPowerShell/v1.0"
+
+# Anaconda
+export PATH="${PATH}:${XDG_DATA_HOME}/anaconda3/bin"
+
+export PATH="${PATH}:/opt/mssql-tools18/bin"

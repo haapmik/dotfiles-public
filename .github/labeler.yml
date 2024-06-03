@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pull-request-labeler.json
+
+# Labels by branch type
+enhancement:
+  - head-branch: ['^feature', '^feat']
+bug:
+  - head-branch: ['^bugfix', '^hotfix', '^bug']
+
+# Labels by changed files
+zsh:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_zshrc', 'dot_zshenv', 'dot_config/zi/*']
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['README.md', 'CONTRIBUTING.md', 'CODE_OF_CONDUCT.md']

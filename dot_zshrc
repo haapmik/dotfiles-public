@@ -1,0 +1,250 @@
+#!/usr/bin/env zsh
+
+# disable system-wide compinit call
+skip_global_compinit=1
+
+######################################
+# Setup for zsh zi
+if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
+  source "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" && zzinit
+else
+  printf "[ERROR] Did not find zi init.zsh from '%s'" "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh"
+  exit 1
+fi
+
+######################################
+# zsh options
+setopt auto_list            # automatically list choices on ambiguous completion.
+setopt auto_pushd           # make cd push the old directory onto the directory stack.
+setopt interactive_comments # comments even in interactive shells.
+setopt multios              # Implicit tees or cats when multiple redirections are attempted.
+setopt prompt_subst         # Substitution of parameters inside the prompt each time the prompt is drawn.
+setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
+
+setopt beep                 # Beep on error
+setopt extendedglob
+setopt nomatch
+setopt notify
+
+# history options
+setopt append_history         # allow sessions to append to same history
+setopt extended_history       # record timestamp with history
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_find_no_dups      # ignore duplicates when looking previous commands
+setopt hist_ignore_all_dups   # remove older duplicate entries from history.
+setopt hist_ignore_dups       # avoid recording duplicates to history
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_reduce_blanks     # remove blanks from history items
+setopt hist_save_no_dups      # do not write a duplicate event to the history file
+setopt hist_verify            #! Do not execute immediately upon history expansion.
+setopt inc_append_history     # write to the history file immediately, not when the shell exits.
+setopt share_history          # share history data between sessions
+setopt bang_hist            # Treat the '!' character, especially during Expansion.
+
+# history file
+HISTFILE=~/.zsh_history
+HISTSIZE=1000
+SAVEHIST=1000
+
+# use vim like keybindings
+bindkey -v
+bindkey "^?" backward-delete-char # set backspace to work in all vim modes
+
+######################################
+# Completions
+
+# Formatting
+zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
+
+# Options
+zstyle ':completion:*:matches' group 'yes'
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*' auto-description '%d'
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' completer _expand _complete _ignored _correct _approximate
+zstyle ':completion:*:match:*' original only
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+zstyle ':completion:*' completions 1
+zstyle ':completion:*' expand prefix suffix
+zstyle ':completion:*' file-sort access
+zstyle ':completion:*' glob 1
+zstyle ':completion:*' group-name ''
+zstyle ':completion:*' ignore-parents parent pwd
+zstyle ':completion:*' insert-unambiguous true
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-suffixes true
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'r:|[._-]=** r:|=**' 'l:|=* r:|=*'
+zstyle ':completion:*' max-errors 2
+zstyle ':completion:*' menu select=long-list select=0
+zstyle ':completion:*' original true
+zstyle ':completion:*' preserve-prefix '//[^/]##/'
+zstyle ':completion:*' prompt 'Found %e errors'
+zstyle ':completion:*' select-prompt %SScrolling active: current selection at %p%s
+zstyle ':completion:*' substitute 1
+zstyle ':completion:*' verbose true
+
+######################################
+# Install plugins, applications, etc..
+
+
+# Install all annexes for zsh zi
+# ref: https://wiki.zshell.dev/ecosystem/category/-annexes
+zi light-mode for \
+  z-shell/z-a-meta-plugins @annexes @fuzzy
+
+# examples here -> https://wiki.zshell.dev/community/gallery/collection
+zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
+
+# Starship prompt
+zi ice as"command" from"gh-r" \
+  atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+  atpull"%atclone" src"init.zsh"
+zi light starship/starship
+
+# Install Zi plugin stack
+zi wait lucid for \
+  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    z-shell/F-Sy-H \
+    z-shell/H-S-MW \
+  blockf \
+    zsh-users/zsh-completions \
+  atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions
+
+zstyle :plugin:fast-syntax-highlighting theme default
+
+## CLI tools
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/delta -> delta' \
+  atclone'./delta --generate-completion zsh > _delta'
+zi light dandavison/delta
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'fd* fd' sbin'**/fd(.exe|) -> fd' \
+  atclone'ln -s autocomplete/_fd -> _fd'
+zi light @sharkdp/fd
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'bat* bat' sbin'**/bat(.exe|) -> bat' \
+  atclone'ln -s autocomplete/bat.zsh -> _bat'
+zi light @sharkdp/bat
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv"hyperfine* hyperfine" sbin"**/hyperfine(.exe|) -> hyperfine" \
+  atclone'ln -s autocomplete/_hyperfine -> _hyperfine'
+zi light @sharkdp/hyperfine
+
+# Provides LS_COLORS themes, in this case 'snazzy'
+zi ice wait lucid from'gh-r' as'program' \
+  mv'vivid* vivid' sbin'**/vivid(.exe|) -> vivid' \
+  atload'export LS_COLORS="$(vivid generate snazzy)"'
+zi light @sharkdp/vivid
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'lsd* lsd' sbin'**/lsd(.exe|) -> ls' \
+  atclone'ln -s autocomplete/_lsd -> _lsd' \
+zi light lsd-rs/lsd
+
+zi ice wait lucid from'gh-r' as'program' \
+  atclone'ln -s completions/_zoxide -> _zoxide;
+  cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd cd > init.zsh' \
+  atpull'%atclone' src'init.zsh' nocompile'!'
+zi light ajeetdsouza/zoxide
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/rg(.exe|) -> rg' \
+  atclone'ln -s complete/_rg -> _rg'
+zi light BurntSushi/ripgrep
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/chezmoi(.exe|) -> chezmoi' \
+  atclone'ln -s completions/chezmoi.zsh -> _chezmoi'
+zi light twpayne/chezmoi
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/lazygit(.exe|) -> lazygit'
+zi light jesseduffield/lazygit
+
+zi ice wait lucid has'pip' id-as'pre-commit' \
+  pip'pre-commit <- !pre-commit -> pre-commit' nocompile
+zi load z-shell/0
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/gitleaks(.exe|) -> gitleaks' \
+  atclone'./gitleaks completion zsh > _gitleaks'
+zi light gitleaks/gitleaks
+
+zi ice wait lucid as'program' has'perl' has'convert' pick'exiftool'
+zi light exiftool/exiftool
+
+# Compilers
+zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
+  atload="[[ ! -f ${ZI[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall -q rust; \
+  export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
+    z-shell/0
+
+
+######################################
+# Misc...
+
+# Load misc plugins to automate certain tasks
+zi is-snippet wait lucid for \
+  if'[[ -d ~/.gnupg ]]' OMZP::gpg-agent
+
+## SSH related configuration and plugins
+zi light sunlei/zsh-ssh
+zi ice wait lucid if'[[ -d ~/.ssh ]]' \
+  atinit'zstyle :omz:plugins:ssh-agent agent-forwarding yes
+  zstyle :omz:plugins:ssh-agent lifetime 4h
+  zstyle :omz:plugins:ssh-agent lazy yes
+  zstyle :omz:plugins:ssh-agent quiet yes'
+zi snippet OMZ::plugins/ssh-agent
+
+# tmux
+if [[ -f /usr/bin/tmux ]] && [[ "${TMUX}" = "" ]]; then
+  tmux new-session -t default
+fi
+
+# micromamba
+if command -v micromamba &> /dev/null; then
+  # >>> mamba initialize >>>
+  # !! Contents within this block are managed by 'mamba init' !!
+  export MAMBA_EXE="$HOME/.local/bin/micromamba";
+  export MAMBA_ROOT_PREFIX="$HOME/.local/share/micromamba";
+  __mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+  if [ $? -eq 0 ]; then
+      eval "$__mamba_setup"
+  else
+      alias micromamba="$MAMBA_EXE"  # Fallback on help from mamba activate
+  fi
+  unset __mamba_setup
+  # <<< mamba initialize <<<
+fi
+
+######################################
+# Aliases
+
+# Avoid using vim on a system where nvim is installed
+if command -v nvim &> /dev/null; then
+  alias vim=nvim
+fi
+
+# Avoid using podman on systems where only docker is installed
+if command -v docker &> /dev/null && ! command -v podman &> /dev/null; then
+  alias podman=docker
+fi
+
+# Load environment variables if the file exists
+if [[ -f ${HOME}/.zshenv ]]; then
+  source "${HOME}/.zshenv"
+fi
+
+autoload -Uz compinit
+compinit
+zi cdreplay -q
