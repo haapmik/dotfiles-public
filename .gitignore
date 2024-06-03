@@ -10,11 +10,12 @@
 
 # Default blocks
 dot_config/*
-!dot_config/zi
-!dot_config/systemd
-!dot_config/tmux
-!dot_config/lazygit
-!dot_config/nvim
+!dot_config/zi/
+!dot_config/systemd/
+!dot_config/tmux/
+!dot_config/lazygit/
+!dot_config/nvim/
+!dot_config/starship.toml
 dot_local
 dot_ssh
 private_dot_ssh
