@@ -7,6 +7,9 @@ bug:
   - head-branch: ['^bugfix', '^hotfix', '^bug']
 
 # Labels by changed files
+lazygit:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_config/lazygit/*']
 systemd:
   - changed-files:
       - any-glob-to-any-file: ['dot_config/systemd/*']
