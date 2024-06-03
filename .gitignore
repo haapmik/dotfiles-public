@@ -1,0 +1,36 @@
+# Log files
+*.log
+
+# Env files
+*.env
+.env
+
+# Database files
+*.db
+
+# Default blocks
+dot_config
+dot_local
+dot_ssh
+private_dot_ssh
+
+# Packages
+*.7z
+*.deb
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.rpm
+*.tar
+*.zip
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
