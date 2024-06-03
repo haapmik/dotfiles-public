@@ -10,6 +10,9 @@ bug:
 systemd:
   - changed-files:
       - any-glob-to-any-file: ['dot_config/systemd/*']
+tmux:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_config/tmux/*' ]
 zsh:
   - changed-files:
       - any-glob-to-any-file: ['dot_zshrc', 'dot_zshenv', 'dot_config/zi/*']
