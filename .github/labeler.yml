@@ -10,6 +10,9 @@ bug:
 lazygit:
   - changed-files:
       - any-glob-to-any-file: ['dot_config/lazygit/*']
+neovim:
+  - changed-files:
+      - any-glob-to-any-file: ['dot_config/nvim/*']
 systemd:
   - changed-files:
       - any-glob-to-any-file: ['dot_config/systemd/*']
