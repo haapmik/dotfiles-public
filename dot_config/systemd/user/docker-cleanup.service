@@ -2,7 +2,8 @@
 Description=Docker cleanup to remove old assets
 
 [Service]
-ExecStart=/bin/bash -c 'docker system prune --all --force --filter="until=$((15*24))h"'
+Type=oneshot
+ExecStart=/bin/bash -c 'docker system prune --all --force --filter="until=$((7*24))h"'
 
 [Install]
 WantedBy=multi-user.target
