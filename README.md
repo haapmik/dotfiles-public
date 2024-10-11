@@ -7,15 +7,20 @@ This repository is provided "as-is" and will always be a work-in-progress. It ut
 
 **Use at Your Own Risk**: Any use of the configurations and scripts in this repository is at your own risk. I cannot guarantee that they will work in your environment or will not cause any issues.
 
+For themes I use [Snazzy]() when bright colors are needed to for attention, and [Kanagawa]() for editor to 
+
 ## Neovim
 
 My daily driver for code editing is [Neovim](https://neovim.io) with various plugins.
 
+- [Kanagawa](https://github.com/rebelot/kanagawa.nvim) as the colorscheme
 - `.config/nvim` all my configuration
 - `.config/nvim/lua/config/lang` language specific definitions
     - these are used to define linting, lsp, formatting and other configurations per language basis
 
 ## Shell
+
+I use color themes that tries to conform with [Snazzy](https://github.com/sindresorhus/hyper-snazzy) for my shell.
 
 ### Zsh
 
