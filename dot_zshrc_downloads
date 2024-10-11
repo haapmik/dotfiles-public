@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 # Compilers
 zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
   atload="[[ ! -f ${ZI[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall -q rust; \
