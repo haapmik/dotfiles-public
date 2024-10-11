@@ -7,6 +7,9 @@
   diffFilter = delta --color-only
 [delta]
   navigate = true
+  line-numbers = true
+  side-by-side = false
+  syntax-theme = Sublime Snazzy
 [merge]
   conflictstyle = diff3
 [diff]
