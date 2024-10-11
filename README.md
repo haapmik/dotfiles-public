@@ -6,20 +6,19 @@ This is a public copy of my dotfiles configurations. It is provided "as-is" and 
 
 **Use at Your Own Risk**: Any use of the configurations and scripts in this repository is at your own risk. I cannot guarantee that they will work in your environment or will not cause any issues.
 
+I use two different color schemes:
+- [Snazzy](https://github.com/sindresorhus/hyper-snazzy) for tasks that require attention
+- [Kanagawa](https://github.com/rebelot/kanagawa.nvim) for text editing and reading because it's easier on the eyes
+
 ## Neovim
 
 My daily driver for code editing is [Neovim](https://neovim.io) with various plugins.
 
-- [Kanagawa](https://github.com/rebelot/kanagawa.nvim) as the colorscheme
 - `.config/nvim` all my configuration
 - `.config/nvim/lua/config/lang` language specific definitions
     - these are used to define linting, lsp, formatting and other configurations per language basis
 
-## Shell
-
-I use color themes that tries to conform with [Snazzy](https://github.com/sindresorhus/hyper-snazzy) for my shell.
-
-### Zsh
+## Zsh
 
 I use [Zsh shell](https://zsh.sourceforge.io/) with [Zi](https://wiki.zshell.dev/) to automate the installation and updates of plugins and CLI tools. Zi is based on the zinit plugin manager originally created by [Zdharma](https://github.com/zdharma).
 
@@ -28,7 +27,7 @@ I use [Zsh shell](https://zsh.sourceforge.io/) with [Zi](https://wiki.zshell.dev
 - `.config/starship.toml` is for the [starship](https://starship.rs/) prompt
     - I try to emulate [pure](https://github.com/sindresorhus/pure) with my prompt definitions, but I might switch back to pure.
 
-### tmux
+## tmux
 
 [Tmux](https://github.com/tmux/tmux) is used as a terminal multiplexer, which allows me to work on a multiple things at the same time.
 
@@ -36,6 +35,11 @@ I use [Zsh shell](https://zsh.sourceforge.io/) with [Zi](https://wiki.zshell.dev
 - `.config/tmux/plugins.conf` plugins related configuration
 - `.config/tmux/theme.sh` theme related definitions
 
+## k9s
+
+[K9s](https://k9scli.io/) is used to simplify Kubernetes cluster management.
+
+- `.config/k9s` for all the configurations
 
 ## Systemd
 
