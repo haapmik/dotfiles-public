@@ -2,6 +2,8 @@
 *.log
 
 # Env files
+*.env.*
+*.env-*
 *.env
 .env
 
@@ -15,6 +17,7 @@ dot_config/*
 !dot_config/tmux/
 !dot_config/lazygit/
 !dot_config/nvim/
+!dot_config/k9s/
 !dot_config/git/
 dot_config/git/*
 !dot_config/git/config
