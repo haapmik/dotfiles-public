@@ -1,13 +1,10 @@
 # My dotfiles
 
-<a href="https://github.com/gitleaks/gitleaks-action">![protected by gitleaks](https://img.shields.io/badge/protected%20by-gitleaks-blue)</a>
 <a href="https://github.com/twpayne/chezmoi">![setup with chezmoi](https://img.shields.io/badge/setup%20with-chezmoi-teal)</a>
 
-This repository is provided "as-is" and will always be a work-in-progress. It utilizes [chezmoi](https://www.chezmoi.io/) to store and manage the state of my personal setup. You are welcome to explore, use it as an example, or gain inspiration for your own configuration. 
+This is a public copy of my dotfiles configurations. It is provided "as-is" and will always be a work-in-progress. It utilizes [chezmoi](https://www.chezmoi.io/) to store and manage the state of my personal setup. You are welcome to explore, use it as an example, or gain inspiration for your own configuration. 
 
 **Use at Your Own Risk**: Any use of the configurations and scripts in this repository is at your own risk. I cannot guarantee that they will work in your environment or will not cause any issues.
-
-For themes I use [Snazzy]() when bright colors are needed to for attention, and [Kanagawa]() for editor to 
 
 ## Neovim
 
