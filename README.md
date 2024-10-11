@@ -2,7 +2,7 @@
 
 <a href="https://github.com/twpayne/chezmoi">![setup with chezmoi](https://img.shields.io/badge/setup%20with-chezmoi-teal)</a>
 
-![screenshot](screenshot.png)
+![screenshots](screenshots.png)
 
 This is a public copy of my dotfiles configurations. It is provided "as-is" and will always be a work-in-progress. It utilizes [chezmoi](https://www.chezmoi.io/) to store and manage the state of my personal setup. You are welcome to explore, use it as an example, or gain inspiration for your own configuration. 
 
