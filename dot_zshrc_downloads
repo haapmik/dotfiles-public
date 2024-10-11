@@ -1,0 +1,137 @@
+# Compilers
+zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
+  atload="[[ ! -f ${ZI[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall -q rust; \
+  export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
+    z-shell/0
+
+# Starship prompt
+zi ice as"command" from"gh-r" \
+  atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
+  atpull"%atclone" src"init.zsh"
+zi light starship/starship
+
+# Provides LS_COLORS themes, in this case 'snazzy'
+zi ice wait lucid from'gh-r' as'program' \
+  mv'vivid* vivid' sbin'**/vivid(.exe|) -> vivid' \
+  atload'export LS_COLORS="$(vivid generate snazzy)"'
+zi light @sharkdp/vivid
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/chezmoi(.exe|) -> chezmoi' \
+  atclone'ln -s completions/chezmoi.zsh -> _chezmoi'
+zi light twpayne/chezmoi
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/stern(.exe|) -> stern' \
+  atclone'./stern --completion zsh > _stern'
+zi light stern/stern
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/zellij(.exe|) -> zellig'
+zi light zellij-org/zellij
+
+#######################################
+# Kubernetes tools
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/k9s(.exe|) -> k9s' \
+  atclone'./k9s completion zsh > _k9s'
+zi light derailed/k9s
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'**/k0sctl* k0sctl' \
+  sbin'**/k0sctl -> k0sctl' \
+  atclone'./k0sctl completion zsh > _k0sctl'
+zi light k0sproject/k0sctl
+
+#######################################
+# Git project management tools
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/lazygit(.exe|) -> lazygit'
+zi light jesseduffield/lazygit
+
+zi ice wait lucid has'pip' id-as'pre-commit' \
+  pip'pre-commit <- !pre-commit -> pre-commit' nocompile nocompletions
+zi load z-shell/0
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/gitleaks(.exe|) -> gitleaks' \
+  atclone'./gitleaks completion zsh > _gitleaks'
+zi light gitleaks/gitleaks
+
+#######################################
+# Image analysis and manipulation tools
+zi ice wait lucid as'program' has'perl' has'convert' pick'exiftool'
+zi light exiftool/exiftool
+
+#######################################
+# Common CLI tooling
+zi ice wait lucid from'gh-r' as'program' \
+  mv'lsd* lsd' sbin'**/lsd(.exe|) -> lsd' \
+  atclone'ln -s autocomplete/_lsd -> _lsd'
+zi light lsd-rs/lsd
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/eza(.exe|) -> eza'
+zi light eza-community/eza
+
+zi ice wait lucid from'gh-r' as'program' \
+  atclone'ln -s completions/_zoxide -> _zoxide;
+  cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd cd > init.zsh' \
+  atpull'%atclone' src'init.zsh' nocompile'!'
+zi light ajeetdsouza/zoxide
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/rg(.exe|) -> rg' \
+  atclone'ln -s complete/_rg -> _rg'
+zi light BurntSushi/ripgrep
+
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/delta -> delta' \
+  atclone'./delta --generate-completion zsh > _delta'
+zi light dandavison/delta
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'fd* fd' sbin'**/fd(.exe|) -> fd' \
+  atclone'ln -s autocomplete/_fd -> _fd'
+zi light @sharkdp/fd
+
+zi ice wait lucid from'gh-r' as'program' \
+  mv'bat* bat' sbin'**/bat(.exe|) -> bat' \
+  atclone'ln -s autocomplete/bat.zsh -> _bat'
+zi light @sharkdp/bat
+
+
+#######################################
+# Security analysis tools
+
+# Creates SBOM
+zi ice wait lucid from'gh-r' as'program' bpick'syft_*_linux_amd64.tar.gz' \
+  sbin'**/syft(.exe|) -> syft' \
+  atclone'./syft completion zsh > _syft'
+zi light anchore/syft
+
+# Analyzes projects and SBOMs
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/grype(.exe|) -> grype' \
+  atclone'./grype completion zsh > _grype'
+zi light anchore/grype
+
+#######################################
+# Testing tools
+
+# Create web service mocks
+zi ice wait lucid from'gh-r' as'program' \
+  sbin'**/imposter(.exe|) -> imposter' \
+  atclone'./imposter completion zsh > _imposter'
+zi light gatehill/imposter-cli
+
+# Stress test web services
+zi ice wait lucid as'program' has'npm' \
+  node'artillery <- !artillery -> artillery' id-as'artillery' nocompile nocompletions
+zi load z-shell/0
+
+# Stress test unix scripts
+zi ice wait lucid from'gh-r' as'program' \
+  mv"hyperfine* hyperfine" sbin"**/hyperfine(.exe|) -> hyperfine" \
+  atclone'ln -s autocomplete/_hyperfine -> _hyperfine'
+zi light @sharkdp/hyperfine

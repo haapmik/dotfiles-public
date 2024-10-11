@@ -92,7 +92,6 @@ zstyle ':completion:*' verbose true
 ######################################
 # Install plugins, applications, etc..
 
-
 # Install all annexes for zsh zi
 # ref: https://wiki.zshell.dev/ecosystem/category/-annexes
 zi light-mode for \
@@ -100,12 +99,6 @@ zi light-mode for \
 
 # examples here -> https://wiki.zshell.dev/community/gallery/collection
 zicompinit # <- https://wiki.zshell.dev/docs/guides/commands
-
-# Starship prompt
-zi ice as"command" from"gh-r" \
-  atclone"./starship init zsh > init.zsh; ./starship completions zsh > _starship" \
-  atpull"%atclone" src"init.zsh"
-zi light starship/starship
 
 # Install Zi plugin stack
 zi wait lucid for \
@@ -116,79 +109,12 @@ zi wait lucid for \
     zsh-users/zsh-completions \
   atload"!_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions
-
 zstyle :plugin:fast-syntax-highlighting theme default
 
-## CLI tools
-zi ice wait lucid from'gh-r' as'program' \
-  sbin'**/delta -> delta' \
-  atclone'./delta --generate-completion zsh > _delta'
-zi light dandavison/delta
-
-zi ice wait lucid from'gh-r' as'program' \
-  mv'fd* fd' sbin'**/fd(.exe|) -> fd' \
-  atclone'ln -s autocomplete/_fd -> _fd'
-zi light @sharkdp/fd
-
-zi ice wait lucid from'gh-r' as'program' \
-  mv'bat* bat' sbin'**/bat(.exe|) -> bat' \
-  atclone'ln -s autocomplete/bat.zsh -> _bat'
-zi light @sharkdp/bat
-
-zi ice wait lucid from'gh-r' as'program' \
-  mv"hyperfine* hyperfine" sbin"**/hyperfine(.exe|) -> hyperfine" \
-  atclone'ln -s autocomplete/_hyperfine -> _hyperfine'
-zi light @sharkdp/hyperfine
-
-# Provides LS_COLORS themes, in this case 'snazzy'
-zi ice wait lucid from'gh-r' as'program' \
-  mv'vivid* vivid' sbin'**/vivid(.exe|) -> vivid' \
-  atload'export LS_COLORS="$(vivid generate snazzy)"'
-zi light @sharkdp/vivid
-
-zi ice wait lucid from'gh-r' as'program' \
-  mv'lsd* lsd' sbin'**/lsd(.exe|) -> ls' \
-  atclone'ln -s autocomplete/_lsd -> _lsd' \
-zi light lsd-rs/lsd
-
-zi ice wait lucid from'gh-r' as'program' \
-  atclone'ln -s completions/_zoxide -> _zoxide;
-  cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd cd > init.zsh' \
-  atpull'%atclone' src'init.zsh' nocompile'!'
-zi light ajeetdsouza/zoxide
-
-zi ice wait lucid from'gh-r' as'program' \
-  sbin'**/rg(.exe|) -> rg' \
-  atclone'ln -s complete/_rg -> _rg'
-zi light BurntSushi/ripgrep
-
-zi ice wait lucid from'gh-r' as'program' \
-  sbin'**/chezmoi(.exe|) -> chezmoi' \
-  atclone'ln -s completions/chezmoi.zsh -> _chezmoi'
-zi light twpayne/chezmoi
-
-zi ice wait lucid from'gh-r' as'program' \
-  sbin'**/lazygit(.exe|) -> lazygit'
-zi light jesseduffield/lazygit
-
-zi ice wait lucid has'pip' id-as'pre-commit' \
-  pip'pre-commit <- !pre-commit -> pre-commit' nocompile
-zi load z-shell/0
-
-zi ice wait lucid from'gh-r' as'program' \
-  sbin'**/gitleaks(.exe|) -> gitleaks' \
-  atclone'./gitleaks completion zsh > _gitleaks'
-zi light gitleaks/gitleaks
-
-zi ice wait lucid as'program' has'perl' has'convert' pick'exiftool'
-zi light exiftool/exiftool
-
-# Compilers
-zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
-  atload="[[ ! -f ${ZI[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall -q rust; \
-  export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
-    z-shell/0
-
+# Load application and tool download logic from separate file
+if [[ -f $HOME/.zshrc_downloads ]]; then
+  source $HOME/.zshrc_downloads
+fi
 
 ######################################
 # Misc...
