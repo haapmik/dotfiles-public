@@ -1,104 +1,82 @@
-local M = {
-  "nvim-telescope/telescope.nvim",
-  event = "VeryLazy",
-  dependencies = {
-    "nvim-lua/plenary.nvim",
-    {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      build = "make",
-    },
-    "nvim-telescope/telescope-file-browser.nvim",
-    "nvim-telescope/telescope-media-files.nvim",
-    "nvim-telescope/telescope-ui-select.nvim",
-    "debugloop/telescope-undo.nvim",
-    "LinArcX/telescope-env.nvim",
-    "smartpde/telescope-recent-files",
-    "cljoly/telescope-repo.nvim",
-    "someone-stole-my-name/yaml-companion.nvim",
-  },
+return {
+	{
+		"nvim-telescope/telescope.nvim",
+		-- We need to load this extension to replace UI elements with Telescope
+		event = "VeryLazy",
+		version = "*",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				enabled = vim.fn.executable("make") == 1 or vim.fn.executable("cmake"),
+				build = vim.fn.executable("make") == 1 and "make"
+					or "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+			},
+			"nvim-telescope/telescope-file-browser.nvim",
+			"nvim-telescope/telescope-ui-select.nvim",
+		},
+		keys = {
+			{ "<leader>T", "<cmd>Telescope<cr>", desc = "Telescope" },
+			{
+				"<leader>ff",
+				function()
+					require("telescope.builtin").find_files()
+				end,
+				desc = "Find files",
+			},
+			{
+				"<leader>fg",
+				function()
+					require("telescope.builtin").live_grep()
+				end,
+				desc = "Grep files",
+			},
+			{
+				"<leader>fb",
+				function()
+					require("telescope.builtin").buffers()
+				end,
+				desc = "Find buffer",
+			},
+			{ "<leader>fl", "<cmd>Telescope file_browser<cr>", desc = "File list" },
+		},
+		config = function()
+			local telescope = require("telescope")
+			local default_theme = "ivy"
+			telescope.setup({
+				defaults = {
+					theme = default_theme,
+					--borderchars = { " " }, -- Enable borderless mode
+				},
+				pickers = {
+					find_files = { theme = default_theme },
+					live_grep = { theme = default_theme },
+					buffers = { theme = default_theme },
+				},
+				extensions = {
+					fzf = {
+						fuzzy = true,
+						override_generic_sorter = true,
+						override_file_sorter = true,
+						case_mode = "smart_case",
+						respect_gitignore = false,
+					},
+					file_browser = {
+						theme = default_theme,
+						--borderchars = { " " }, -- Enable borderless mode
+						hijack_netrw = true,
+						grouped = true,
+						hidden = true,
+						respect_gitignore = false,
+					},
+					["ui-select"] = {
+						require("telescope.themes").get_ivy(),
+					},
+				},
+			})
+			telescope.load_extension("file_browser")
+			telescope.load_extension("ui-select")
+			telescope.load_extension("fzf")
+		end,
+	},
 }
-
-function M.config()
-  local telescope = require("telescope")
-  local theme = "ivy"
-  local file_ignore_patterns = {}
-
-  telescope.setup({
-    defaults = {
-      sorting_strategy = "ascending",
-      layout_config = {
-        prompt_position = "top",
-      },
-      theme = theme,
-      file_ignore_patterns = file_ignore_patterns,
-      borderchars = { " " }, -- Enable borderless mode
-    },
-    pickers = {
-      find_files = {
-        theme = theme,
-      },
-      live_grep = {
-        theme = theme,
-      },
-      buffers = {
-        theme = theme,
-      },
-      quickfix = {
-        theme = theme,
-      },
-      diagnostics = {
-        theme = theme,
-      },
-      git_status = {
-        theme = theme,
-      },
-      git_branches = {
-        theme = theme,
-      },
-      git_commits = {
-        theme = theme,
-      },
-    },
-    extensions = {
-      fzf = {
-        fuzzy = true,
-        override_generic_sorter = true,
-        override_file_sorter = true,
-        case_mode = "smart_case",
-        respect_gitignore = false,
-      },
-      undo = {
-        use_delta = true,
-      },
-      file_browser = {
-        theme = theme,
-        borderchars = { " " }, -- Enable borderless mode
-        hijack_netrw = true,
-        grouped = true,
-        hidden = true,
-        respect_gitignore = false,
-      },
-      repo = {
-        list = {
-          search_dirs = {
-            "~/git-projects",
-          },
-        },
-      },
-      ["ui-select"] = {
-        require("telescope.themes").get_ivy(),
-      },
-    },
-  })
-  telescope.load_extension("fzf")
-  telescope.load_extension("file_browser")
-  telescope.load_extension("ui-select")
-  telescope.load_extension("media_files")
-  telescope.load_extension("env")
-  telescope.load_extension("repo")
-  telescope.load_extension("recent_files")
-  telescope.load_extension("yaml_schema")
-  telescope.load_extension("undo")
-end
-
-return M
