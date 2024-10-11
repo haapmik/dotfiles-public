@@ -12,6 +12,8 @@ This repository is provided "as-is" and will always be a work-in-progress. It ut
 My daily driver for code editing is [Neovim](https://neovim.io) with various plugins.
 
 - `.config/nvim` all my configuration
+- `.config/nvim/lua/config/lang` language specific definitions
+    - these are used to define linting, lsp, formatting and other configurations per language basis
 
 ## Shell
 
